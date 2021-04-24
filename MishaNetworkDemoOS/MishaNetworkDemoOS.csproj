@@ -11,7 +11,7 @@
         <DebugEnabled>False</DebugEnabled>
         <DebugMode>Source</DebugMode>
         <IgnoreDebugStubAttribute>False</IgnoreDebugStubAttribute>
-        <ISOFile>bin\Debug\netcoreapp2.0\cosmos\CosmosNetwork.iso</ISOFile>
+        <ISOFile>bin\Debug\netcoreapp2.0\cosmos\MishaNetworkDemoOS.iso</ISOFile>
     </PropertyGroup>
 
     <PropertyGroup>
