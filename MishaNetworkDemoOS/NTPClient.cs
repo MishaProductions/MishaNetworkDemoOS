@@ -11,6 +11,8 @@ namespace CosmosNetwork
         /// </summary>
         public bool Debug { get; set; } = false;
         public Address NTPServer = new Address(40, 119, 6, 228);
+        
+        
         /// <summary>
         /// Get network time, in UTC.
         /// </summary>
@@ -35,7 +37,7 @@ namespace CosmosNetwork
                 //Send data
                 xClient.Send(ntpData);
                 if (Debug)
-                    Console.WriteLine("Reciving NTP packet");
+                    Console.WriteLine("Receiving NTP packet");
 
                 // Receive data
                 var endpoint = new EndPoint(NTPServer, 123);
