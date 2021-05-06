@@ -27,7 +27,7 @@ namespace CosmosNetwork
             //Setting the Leap Indicator, Version Number and Mode values
             ntpData[0] = 0x1B; //LI = 0 (no warning), VN = 3 (IPv4 only), Mode = 3 (Client Mode)
 
-            using (var xClient = new UdpClient(4242))
+            using (var xClient = new UdpClient(123))
             {
                 if (Debug)
                     Console.WriteLine("Connecting to " + NTPServer.ToString());
