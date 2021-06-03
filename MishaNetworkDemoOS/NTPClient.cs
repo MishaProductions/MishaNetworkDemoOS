@@ -11,6 +11,8 @@ namespace CosmosNetwork
         /// </summary>
         public bool Debug { get; set; } = false;
         public Address NTPServer = new Address(40, 119, 6, 228);
+        
+        
         /// <summary>
         /// Get network time, in UTC.
         /// </summary>
@@ -25,7 +27,7 @@ namespace CosmosNetwork
             //Setting the Leap Indicator, Version Number and Mode values
             ntpData[0] = 0x1B; //LI = 0 (no warning), VN = 3 (IPv4 only), Mode = 3 (Client Mode)
 
-            using (var xClient = new UdpClient(4242))
+            using (var xClient = new UdpClient(123))
             {
                 if (Debug)
                     Console.WriteLine("Connecting to " + NTPServer.ToString());
@@ -35,7 +37,7 @@ namespace CosmosNetwork
                 //Send data
                 xClient.Send(ntpData);
                 if (Debug)
-                    Console.WriteLine("Reciving NTP packet");
+                    Console.WriteLine("Receiving NTP packet");
 
                 // Receive data
                 var endpoint = new EndPoint(NTPServer, 123);
