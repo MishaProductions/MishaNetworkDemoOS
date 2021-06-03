@@ -1,4 +1,5 @@
 ﻿using Cosmos.HAL;
+using Cosmos.HAL.Drivers.PCI.Network;
 using Cosmos.System.Network;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
@@ -16,9 +17,35 @@ namespace CosmosNetwork
         private DnsClient xClient = new DnsClient();
         protected override void BeforeRun()
         {
+            #region Register additional network cards
+            foreach (PCIDevice device in PCI.Devices)
+            {
+                if ((device.ClassCode == 0x02) && (device.Subclass == 0x00) && // is Ethernet Controller
+                    device == PCI.GetDevice(device.bus, device.slot, device.function))
+                {
+
+                    Console.WriteLine("Found " + PCIDevice.DeviceClass.GetDeviceString(device) + " on PCI " + device.bus + ":" + device.slot + ":" + device.function);
+
+
+                    if (device.VendorID == 0x10EC && device.DeviceID == 0x8168)
+                    {
+
+                        Console.WriteLine("NIC IRQ: " + device.InterruptLine);
+
+                        var RTL8168Device = new RTL8168(device);
+
+                        RTL8168Device.NameID = ("eth0");
+
+                        Console.WriteLine("Registered at " + RTL8168Device.NameID + " (" + RTL8168Device.MACAddress.ToString() + ")");
+
+                        RTL8168Device.Enable();
+                    }
+
+                }
+            }
+            #endregion
             try
             {
-
                 using (var xClient = new DHCPClient())
                 {
                     /** Send a DHCP Discover packet **/
@@ -94,7 +121,6 @@ namespace CosmosNetwork
         }
         protected override void Run()
         {
-            NetworkStack.Update();
             Console.Write("> ");
             var input = Console.ReadLine();
 
@@ -204,7 +230,7 @@ namespace CosmosNetwork
                             PacketReceived++;
                         }
                     }
-
+                     
                     xClient.Close();
                 }
                 catch (Exception x)
@@ -235,7 +261,6 @@ namespace CosmosNetwork
             {
                 Console.WriteLine("Unknown command.");
             }
-            NetworkStack.Update();
         }
     }
 }
