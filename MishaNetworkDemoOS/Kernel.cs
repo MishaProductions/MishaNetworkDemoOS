@@ -18,6 +18,7 @@ namespace CosmosNetwork
         protected override void BeforeRun()
         {
             #region Register additional network cards
+            int i = 1;
             foreach (PCIDevice device in PCI.Devices)
             {
                 if ((device.ClassCode == 0x02) && (device.Subclass == 0x00) && // is Ethernet Controller
@@ -34,14 +35,22 @@ namespace CosmosNetwork
 
                         var RTL8168Device = new RTL8168(device);
 
-                        RTL8168Device.NameID = ("eth0");
+                        RTL8168Device.NameID = "eth"+i;
 
                         Console.WriteLine("Registered at " + RTL8168Device.NameID + " (" + RTL8168Device.MACAddress.ToString() + ")");
 
                         RTL8168Device.Enable();
+                        i++;
                     }
 
                 }
+            }
+            foreach (var item in Intel8254X.FindAll())
+            {
+                item.NameID = "eth" + i;
+                item.Enable();
+                Console.WriteLine("Registered at " + item.NameID + " (" + item.MACAddress.ToString() + ")");
+                i++;
             }
             #endregion
             try
@@ -55,7 +64,8 @@ namespace CosmosNetwork
                     if (r == -1)
                     {
                         Console.WriteLine("Failure while configuring DHCP: timeout");
-                        ManualConfig();
+                        xClient.Close();
+                        return;
                     }
                     else
                     {
@@ -69,18 +79,10 @@ namespace CosmosNetwork
             {
                 Console.WriteLine("err: " + x.Message);
             }
-        }
-        public void ManualConfig()
-        {
-            Console.WriteLine("Preforming network Manual configuration");
-            NetworkDevice nic = NetworkDevice.GetDeviceByName("eth0"); //get network device by name
-            IPConfig.Enable(nic,
-                new Address(192, 168, 1, 70), //IP
-                new Address(255, 255, 255, 252), //SUBNET
-                new Address(192, 168, 2, 1) //GATEWAY
-                );                      //enable IPv4 configuration
 
-            Console.WriteLine("Manual config complete");
+            NTPClient client = new NTPClient();
+            var t = client.GetNetworkTime();
+            Console.WriteLine("Curent time: " + t);
         }
         public void ipconfig()
         {
