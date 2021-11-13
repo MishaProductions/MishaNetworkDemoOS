@@ -78,8 +78,8 @@ namespace Cosmos.HAL.Drivers.PCI.Network
                 mRxDescriptor.Write32(xOffset + 4, 0);
                 mTxDescriptor.Write32(xOffset + 4, 0);
 
-                mRxDescriptor.Write32(xOffset + 8, rxbuffer.Offset);
-                mTxDescriptor.Write32(xOffset + 8, txbuffer.Offset);
+                mRxDescriptor.Write32(xOffset + 8, (uint)rxbuffer.Offset);
+                mTxDescriptor.Write32(xOffset + 8, (uint)txbuffer.Offset);
 
                 mRxDescriptor.Write32(xOffset + 12, 0);
                 mTxDescriptor.Write32(xOffset + 12, 0);
@@ -130,10 +130,10 @@ namespace Cosmos.HAL.Drivers.PCI.Network
 
             Ports.OutB((ushort)(BaseAddress + 0xEC), 0x3F); // No early transmit
 
-            Ports.OutD((ushort)(BaseAddress + 0x20), mTxDescriptor.Offset);
+            Ports.OutD((ushort)(BaseAddress + 0x20), (uint)mTxDescriptor.Offset);
             Console.WriteLine("addresstx desc: " + mTxDescriptor.Offset);
 
-            Ports.OutD((ushort)(BaseAddress + 0xE4), mRxDescriptor.Offset);
+            Ports.OutD((ushort)(BaseAddress + 0xE4), (uint)mRxDescriptor.Offset);
             Console.WriteLine("addressrx desc: " + mRxDescriptor.Offset);
 
             if (((GetMacVersion() & 0x7cf00000) == 0x54100000) || ((GetMacVersion() & 0x7cf00000) == 0x54000000))

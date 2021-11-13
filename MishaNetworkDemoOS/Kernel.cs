@@ -220,11 +220,11 @@ namespace CosmosNetwork
                         {
                             if (second < 1)
                             {
-                                Console.WriteLine("Reply received from " + endpoint.address.ToString() + " time < 1s");
+                                Console.WriteLine("Reply received from " + endpoint.Address.ToString() + " time < 1s");
                             }
                             else if (second >= 1)
                             {
-                                Console.WriteLine("Reply received from " + endpoint.address.ToString() + " time " + second + "s");
+                                Console.WriteLine("Reply received from " + endpoint.Address.ToString() + " time " + second + "s");
                             }
 
                             PacketReceived++;

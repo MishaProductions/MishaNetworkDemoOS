@@ -1,8 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp2.0</TargetFramework>
-        <RuntimeIdentifier>cosmos</RuntimeIdentifier>
+        <TargetFramework>net5.0</TargetFramework>
         <SelfContained>True</SelfContained>
         <BinFormat>ELF</BinFormat>
         <StackCorruptionDetectionEnabled>True</StackCorruptionDetectionEnabled>
@@ -11,7 +10,9 @@
         <DebugEnabled>False</DebugEnabled>
         <DebugMode>Source</DebugMode>
         <IgnoreDebugStubAttribute>False</IgnoreDebugStubAttribute>
-        <ISOFile>bin\Debug\netcoreapp2.0\cosmos\MishaNetworkDemoOS.iso</ISOFile>
+        <ISOFile>bin\Debug\net5.0\MishaNetworkDemoOS.iso</ISOFile>
+        <CompileVBEMultiboot>False</CompileVBEMultiboot>
+        <VBEResolution>a</VBEResolution>
     </PropertyGroup>
 
     <PropertyGroup>
