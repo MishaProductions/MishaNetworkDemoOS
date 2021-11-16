@@ -168,7 +168,6 @@ namespace Cosmos.HAL.Drivers.PCI.Network
 
             if ((status & 0x0001) != 0)
             {
-                Console.WriteLine("Got packet");
                 ReadRawData();
             }
             if ((status & 0x0002) != 0) Console.WriteLine("Receive error");
@@ -222,7 +221,10 @@ namespace Cosmos.HAL.Drivers.PCI.Network
             if ((status & 0x0800) != 0) Console.WriteLine("Unknown Status (reserved Bit 12)");
             if ((status & 0x1000) != 0) Console.WriteLine("Unknown Status (reserved Bit 13)");
             if ((status & 0x2000) != 0) Console.WriteLine("Unknown Status (reserved Bit 14)");
-            if ((status & 0x4000) != 0) Console.WriteLine("Timeout");
+            if ((status & 0x4000) != 0)
+            {
+                //Timeout
+            }
             if ((status & 0x8000) != 0) Console.WriteLine("Unknown Status (reserved Bit 16)");
 
             Ports.OutW((ushort)(BaseAddress + 0x3E), status);
@@ -247,7 +249,6 @@ namespace Cosmos.HAL.Drivers.PCI.Network
 
         public override bool QueueBytes(byte[] buffer, int offset, int length)
         {
-            Console.WriteLine("Sending packet");
             byte[] data = new byte[length];
             for (int b = 0; b < length; b++)
             {
@@ -331,8 +332,7 @@ namespace Cosmos.HAL.Drivers.PCI.Network
                     uint length = mRxDescriptor.Read32(xOffset + 0) & 0x3FFF;
                     if (length > 4)
                     {
-
-                        byte[] recv_data = new byte[length - 4];
+                        byte[] recv_data = new byte[length];
                         for (uint b = 0; b < length; b++)
                         {
                             recv_data[b] = mRxBuffers[i][b];
@@ -346,7 +346,6 @@ namespace Cosmos.HAL.Drivers.PCI.Network
                         {
                             mRecvBuffer.Enqueue(recv_data);
                         }
-
                     }
 
                     // Reset descriptor
