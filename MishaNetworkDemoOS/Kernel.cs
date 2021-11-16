@@ -31,7 +31,7 @@ namespace CosmosNetwork
                     if (device.VendorID == 0x10EC && device.DeviceID == 0x8168)
                     {
 
-                        Console.WriteLine("NIC IRQ: " + device.InterruptLine);
+                        Console.WriteLine("RTL8168 NIC IRQ: " + device.InterruptLine);
 
                         var RTL8168Device = new RTL8168(device);
 

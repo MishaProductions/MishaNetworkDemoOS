@@ -97,16 +97,18 @@ namespace Cosmos.HAL.Drivers.PCI.Network
 
             // We are handling this device
             pciCard.Claimed = true;
+            BaseAddress = pciCard.BAR0 & (~0xFU);
 
-            BaseAddress = pciCard.BaseAddressBar[0].BaseAddress;
+            Console.WriteLine("Amount of bars: " + device.BaseAddressBar.Length);
+            Console.WriteLine("BAR0: " + BaseAddress);
 
             // Enable the card
             pciCard.EnableDevice();
 
             SetIrqHandler(device.InterruptLine, HandleNetworkInterrupt);
 
-            Ports.OutB((ushort)(BaseAddress + 0xE0), 0x08);
-
+            //Ports.OutB((ushort)(BaseAddress + 0xE0), 0x08);
+            Console.WriteLine("Reset");
             Reset();
 
             // Get the MAC Address
@@ -117,7 +119,8 @@ namespace Cosmos.HAL.Drivers.PCI.Network
             }
 
             mac = new MACAddress(eeprom_mac);
-
+            Console.WriteLine("MAC: "+mac.ToString());
+            Console.WriteLine("Init buffers");
             InitBuffers();
 
             Ports.OutD((ushort)(BaseAddress + 0x44), 0x0000E70F); // Enable RX
@@ -149,7 +152,6 @@ namespace Cosmos.HAL.Drivers.PCI.Network
 
             //Console.WriteLine("Netcard version: 0x" + System.Utils.Conversion.DecToHex((int)GetMacVersion() & 0x7cf00000));
             //Console.WriteLine("Netcard version: 0x" + System.Utils.Conversion.DecToHex((int)GetMacVersion() & 0x7c800000));
-
         }
 
         public bool Reset()
@@ -166,6 +168,7 @@ namespace Cosmos.HAL.Drivers.PCI.Network
 
             if ((status & 0x0001) != 0)
             {
+                Console.WriteLine("Got packet");
                 ReadRawData();
             }
             if ((status & 0x0002) != 0) Console.WriteLine("Receive error");
@@ -244,13 +247,14 @@ namespace Cosmos.HAL.Drivers.PCI.Network
 
         public override bool QueueBytes(byte[] buffer, int offset, int length)
         {
+            Console.WriteLine("Sending packet");
             byte[] data = new byte[length];
             for (int b = 0; b < length; b++)
             {
                 data[b] = buffer[b + offset];
             }
 
-            if (SendBytes(ref data) == false)
+            if (SendBytes(ref data))
             {
                 mTransmitBuffer.Enqueue(data);
             }
@@ -286,7 +290,10 @@ namespace Cosmos.HAL.Drivers.PCI.Network
         protected bool SendBytes(ref byte[] aData)
         {
             if (aData.Length > 2048)
+            {
+                Console.WriteLine("Packet spliting not supported");
                 return false; // Splitting packets not yet supported
+            }
 
             uint xOffset = (uint)(mNextTXDesc * 16);
 
