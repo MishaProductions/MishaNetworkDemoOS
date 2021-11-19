@@ -6,6 +6,8 @@ using Cosmos.System.Network.IPv4;
 using Cosmos.System.Network.IPv4.UDP;
 using Cosmos.System.Network.IPv4.UDP.DHCP;
 using Cosmos.System.Network.IPv4.UDP.DNS;
+using MishaNetworkDemoOS;
+using MishaNetworkDemoOS.Clients;
 using System;
 using System.Text;
 using Sys = Cosmos.System;
@@ -14,7 +16,7 @@ namespace CosmosNetwork
 {
     public class Kernel : Sys.Kernel
     {
-        private DnsClient xClient = new DnsClient();
+        //private DnsClient xClient = new DnsClient();
         protected override void BeforeRun()
         {
             #region Register additional network cards
@@ -35,7 +37,7 @@ namespace CosmosNetwork
 
                         var RTL8168Device = new RTL8168(device);
 
-                        RTL8168Device.NameID = "eth"+i;
+                        RTL8168Device.NameID = "eth" + i;
 
                         Console.WriteLine("Registered at " + RTL8168Device.NameID + " (" + RTL8168Device.MACAddress.ToString() + ")");
 
@@ -83,6 +85,16 @@ namespace CosmosNetwork
             NTPClient client = new NTPClient();
             var t = client.GetNetworkTime();
             Console.WriteLine("Curent time: " + t);
+            //var ip = Utils.GetAddressFromName("boristyukin.com");
+            //if (ip == null)
+            //{
+            //    Console.WriteLine("Boristyukin.com IP null!");
+            //    return;
+            //}
+            //Console.WriteLine("Address: " + ip.ToString());
+
+            HTTPClient http = new HTTPClient("youtube.com");
+            Console.WriteLine(http.GET("/"));
         }
         public void ipconfig()
         {
@@ -135,23 +147,23 @@ namespace CosmosNetwork
             }
             else if (input.ToLower().StartsWith("getip"))
             {
-                Console.WriteLine("Connecting to DNS Server");
-                xClient.Connect(new Address(8, 8, 4, 4));
+                //Console.WriteLine("Connecting to DNS Server");
+                //xClient.Connect(new Address(8, 8, 4, 4));
 
-                Console.WriteLine("Asking IP for github.com");
-                xClient.SendAsk("github.com");
+                //Console.WriteLine("Asking IP for github.com");
+                //xClient.SendAsk("github.com");
 
-                Console.WriteLine("Waiting for data");
+                //Console.WriteLine("Waiting for data");
 
-                var addr = xClient.Receive();
-                if (addr == null)
-                {
-                    Console.WriteLine("Error: connection timed out");
-                }
-                else
-                {
-                    Console.WriteLine("Got data: " + addr.ToString());
-                }
+                //var addr = xClient.Receive();
+                //if (addr == null)
+                //{
+                //    Console.WriteLine("Error: connection timed out");
+                //}
+                //else
+                //{
+                //    Console.WriteLine("Got data: " + addr.ToString());
+                //}
             }
             else if (input.ToLower().StartsWith("gettime"))
             {
@@ -181,10 +193,9 @@ namespace CosmosNetwork
                 if (dest == null)
                 {
                     //make a DNS request
-                    xClient.Connect(DNSConfig.Server(0));
-                    xClient.SendAsk(s);
-                    dest = xClient.Receive();
-                    xClient.Close();
+                    //xClient.Connect(DNSConfig.Server(0));
+                    //xClient.SendAsk(s);
+                    //dest = xClient.Receive();
 
                     if (dest == null)
                     {
@@ -232,7 +243,7 @@ namespace CosmosNetwork
                             PacketReceived++;
                         }
                     }
-                     
+
                     xClient.Close();
                 }
                 catch (Exception x)
