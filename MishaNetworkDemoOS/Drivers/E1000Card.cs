@@ -286,14 +286,17 @@ namespace CosmosNetwork
         }
         public override bool ReceiveBytes(byte[] buffer, int offset, int max)
         {
+            Console.WriteLine("ReceiveBytes() is not implemented.");
             throw new NotImplementedException();
         }
         public override byte[] ReceivePacket()
         {
+            Console.WriteLine("ReceivePacket() is not implemented.");
             throw new NotImplementedException();
         }
         public override int BytesAvailable()
         {
+            Console.WriteLine("BytesAvailable() is not implemented.");
             throw new NotImplementedException();
         }
         public override bool Enable()

@@ -1,5 +1,6 @@
 ﻿using Cosmos.HAL;
 using Cosmos.HAL.Drivers.PCI.Network;
+using Cosmos.System.Graphics;
 using Cosmos.System.Network;
 using Cosmos.System.Network.Config;
 using Cosmos.System.Network.IPv4;
@@ -16,9 +17,9 @@ namespace CosmosNetwork
 {
     public class Kernel : Sys.Kernel
     {
-        //private DnsClient xClient = new DnsClient();
         protected override void BeforeRun()
         {
+            Console.Clear();
             #region Register additional network cards
             int i = 1;
             foreach (PCIDevice device in PCI.Devices)
@@ -85,16 +86,11 @@ namespace CosmosNetwork
             NTPClient client = new NTPClient();
             var t = client.GetNetworkTime();
             Console.WriteLine("Curent time: " + t);
-            //var ip = Utils.GetAddressFromName("boristyukin.com");
-            //if (ip == null)
-            //{
-            //    Console.WriteLine("Boristyukin.com IP null!");
-            //    return;
-            //}
-            //Console.WriteLine("Address: " + ip.ToString());
 
-            HTTPClient http = new HTTPClient("youtube.com");
-            Console.WriteLine(http.GET("/"));
+            HTTPClient http = new HTTPClient("github.com");
+            var responce = http.GET("/test.html");
+            Console.WriteLine("====");
+            Console.WriteLine(responce);
         }
         public void ipconfig()
         {
@@ -147,36 +143,21 @@ namespace CosmosNetwork
             }
             else if (input.ToLower().StartsWith("getip"))
             {
-                //Console.WriteLine("Connecting to DNS Server");
-                //xClient.Connect(new Address(8, 8, 4, 4));
-
-                //Console.WriteLine("Asking IP for github.com");
-                //xClient.SendAsk("github.com");
-
-                //Console.WriteLine("Waiting for data");
-
-                //var addr = xClient.Receive();
-                //if (addr == null)
-                //{
-                //    Console.WriteLine("Error: connection timed out");
-                //}
-                //else
-                //{
-                //    Console.WriteLine("Got data: " + addr.ToString());
-                //}
+                var addr = Utils.GetAddressFromName("github.com");
+                if (addr == null)
+                {
+                    Console.WriteLine("address is null!");
+                }
+                else
+                {
+                    Console.WriteLine("Got data: " + addr.ToString());
+                }
             }
             else if (input.ToLower().StartsWith("gettime"))
             {
                 NTPClient client = new NTPClient();
                 var t = client.GetNetworkTime();
-                if (t == null)
-                {
-                    Console.WriteLine("NTPClient.GetNetworkTime() Returned null!");
-                }
-                else
-                {
-                    Console.WriteLine("NTPClient.GetNetworkTime() Returned " + t);
-                }
+                Console.WriteLine("NTPClient.GetNetworkTime() Returned " + t);
             }
             else if (input.ToLower().StartsWith("ping"))
             {
