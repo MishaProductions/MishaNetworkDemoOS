@@ -149,13 +149,13 @@ namespace CosmosNetwork
         }
         private void RXInitialize()
         {
-            var tmp = Cosmos.Core.Memory.Old.Heap.MemAlloc(32 * 16 + 16);
+            var tmp = (uint)Cosmos.Core.Memory.Heap.Alloc(32 * 16 + 16);
             RXDescs = (tmp % 16 != 0) ? (tmp + 16 - (tmp % 16)) : tmp;
 
             for (uint i = 0; i < 32; i++)
             {
                 RXDesc* desc = (RXDesc*)(RXDescs + (i * 16));
-                desc->addr = Cosmos.Core.Memory.Old.Heap.MemAlloc(2048 + 16);
+                desc->addr = (uint)Cosmos.Core.Memory.Heap.Alloc(2048 + 16);
                 desc->status = 0;
             }
 
@@ -182,7 +182,7 @@ namespace CosmosNetwork
         }
         private void TXInitialize()
         {
-            var tmp = (uint)Cosmos.Core.Memory.Old.Heap.MemAlloc(8 * 16 + 16);
+            var tmp = (uint)Cosmos.Core.Memory.Heap.Alloc(8 * 16 + 16);
             TXDescs = (tmp % 16 != 0) ? (tmp + 16 - (tmp % 16)) : tmp;
 
             for (int i = 0; i < 8; i++)
@@ -255,7 +255,7 @@ namespace CosmosNetwork
             //send bytes
 
             //Copy Buffer[offset] to ptr
-            byte* ptr = (byte*)Cosmos.Core.Memory.Old.Heap.MemAlloc((uint)length);
+            byte* ptr = (byte*)Cosmos.Core.Memory.Heap.Alloc((uint)length);
             int a = 0;
             for (int i = offset; i < offset + length; i++)
             {
