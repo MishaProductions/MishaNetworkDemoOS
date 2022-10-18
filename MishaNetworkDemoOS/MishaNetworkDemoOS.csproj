@@ -10,7 +10,7 @@
         <DebugEnabled>False</DebugEnabled>
         <DebugMode>Source</DebugMode>
         <IgnoreDebugStubAttribute>False</IgnoreDebugStubAttribute>
-        <ISOFile>bin\Debug\net5.0\MishaNetworkDemoOS.iso</ISOFile>
+        <ISOFile>bin\Debug\net6.0\MishaNetworkDemoOS.iso</ISOFile>
         <CompileVBEMultiboot>False</CompileVBEMultiboot>
         <VBEResolution>a</VBEResolution>
     </PropertyGroup>
