@@ -98,30 +98,32 @@ namespace CosmosNetwork
             {
                 Console.WriteLine("No network configuration detected!");
             }
-            foreach (NetworkDevice device in NetworkConfig.Keys)
-            {
-                switch (device.CardType)
-                {
-                    case CardType.Ethernet:
-                        Console.Write("Ethernet Card : " + device.NameID + " - " + device.Name);
-                        break;
-                    case CardType.Wireless:
-                        Console.Write("Wireless Card : " + device.NameID + " - " + device.Name);
-                        break;
-                }
-                if (NetworkConfig.CurrentConfig.Key == device)
-                {
-                    Console.WriteLine(" (current)");
-                }
-                else
-                {
-                    Console.WriteLine();
-                }
+            //foreach (NetworkDevice device in NetworkConfiguration.CurrentNetworkConfig.)
+            //{
+            //    switch (device.CardType)
+            //    {
+            //        case CardType.Ethernet:
+            //            Console.Write("Ethernet Card : " + device.NameID + " - " + device.Name);
+            //            break;
+            //        case CardType.Wireless:
+            //            Console.Write("Wireless Card : " + device.NameID + " - " + device.Name);
+            //            break;
+            //    }
+            //    if (NetworkConfig.CurrentConfig.Key == device)
+            //    {
+            //        Console.WriteLine(" (current)");
+            //    }
+            //    else
+            //    {
+            //        Console.WriteLine();
+            //    }
 
-                Console.WriteLine("MAC Address          : " + device.MACAddress.ToString());
-                Console.WriteLine("IP Address           : " + NetworkConfig.Get(device).IPAddress.ToString());
-                Console.WriteLine("Subnet mask          : " + NetworkConfig.Get(device).SubnetMask.ToString());
-                Console.WriteLine("Default Gateway      : " + NetworkConfig.Get(device).DefaultGateway.ToString());
+            foreach (var item in NetworkConfiguration.NetworkConfigs)
+            {
+                Console.WriteLine("MAC Address          : " + item.Device.MACAddress.ToString());
+                Console.WriteLine("IP Address           : " + item.IPConfig.IPAddress.ToString());
+                Console.WriteLine("Subnet mask          : " + item.IPConfig.SubnetMask.ToString());
+                Console.WriteLine("Default Gateway      : " + item.IPConfig.DefaultGateway.ToString());
                 Console.WriteLine("DNS Nameservers      : ");
                 foreach (Address dnsnameserver in DNSConfig.DNSNameservers)
                 {
